@@ -67,8 +67,8 @@ jobs:
           export LD_LIBRARY_PATH="${{ env.RDMA_CORE_PATH }}/lib:$LD_LIBRARY_PATH"
           ./autogen.sh
           ./configure --prefix=$PWD/install ${{ env.OFI_PROVIDER_FLAGS }} CC=${{ matrix.cc }} --with-lttng
-          make -j 2 AM_CFLAGS="-Wall -Werror"; make install
-          DISTCHECK_CONFIGURE_FLAGS="${{ env.OFI_PROVIDER_FLAGS }}" make -j 2 distcheck
+          make -j $(nproc) AM_CFLAGS="-Wall -Werror"; make install
+          DISTCHECK_CONFIGURE_FLAGS="${{ env.OFI_PROVIDER_FLAGS }}" make -j $(nproc) distcheck
           $PWD/install/bin/fi_info -l
       - name: Upload build logs
         if: failure()
@@ -99,8 +99,8 @@ jobs:
           export LD_LIBRARY_PATH="${{ env.RDMA_CORE_PATH }}/lib:$LD_LIBRARY_PATH"
           ./autogen.sh
           ./configure --prefix=$PWD/install ${{ env.OFI_PROVIDER_FLAGS }} --with-lttng
-          make -j 2 AM_CFLAGS="-Wall -Werror"; make install
-          DISTCHECK_CONFIGURE_FLAGS="${{ env.OFI_PROVIDER_FLAGS }}" make -j 2 distcheck
+          make -j $(nproc) AM_CFLAGS="-Wall -Werror"; make install
+          DISTCHECK_CONFIGURE_FLAGS="${{ env.OFI_PROVIDER_FLAGS }}" make -j $(nproc) distcheck
           $PWD/install/bin/fi_info -l
       - name: Upload build logs
         if: failure()
@@ -147,7 +147,7 @@ jobs:
                                             --with-cuda=/usr/local/cuda --with-ze \
                                             --with-lttng \
                                             CC=${{ matrix.cc }}
-          make -j 2 AM_CFLAGS="-Wall -Werror"; make install
+          make -j $(nproc) AM_CFLAGS="-Wall -Werror"; make install
           $PWD/install/bin/fi_info -l
           $PWD/install/bin/fi_info -c FI_HMEM
       - name: Upload build logs
